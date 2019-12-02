@@ -1,21 +1,14 @@
 # HackAssembler
 
-**TODO: Add description**
+An assembler for the Hack computer (from NAND2Tetris) written in Elixir
 
-## Installation
+Turns:
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `hack_assembler` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:hack_assembler, "~> 0.1.0"}
-  ]
-end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/hack_assembler](https://hexdocs.pm/hack_assembler).
-
+// some assembly program
+@0
+```
+Into:
+```
+0000 0000 0000 0000
+```
