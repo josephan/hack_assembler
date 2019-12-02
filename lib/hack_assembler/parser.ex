@@ -1,5 +1,5 @@
 defmodule HackAssembler.ParsedData do
-  defstruct [:command, :type, :op_code, :label_value, :a_value, :c_dest, :c_comp, :c_jump]
+  defstruct [:command, :type, :label_value, :a_value, :c_dest, :c_comp, :c_jump]
 end
 
 defmodule HackAssembler.Parser do
@@ -16,7 +16,6 @@ defmodule HackAssembler.Parser do
     %ParsedData{
       command: command,
       type: type,
-      op_code: op_code(type),
       a_value: a_value(type, command),
       c_dest: c_dest,
       c_comp: c_comp,
@@ -47,10 +46,6 @@ defmodule HackAssembler.Parser do
         :c_instruction
     end
   end
-
-  defp op_code(:a_instruction), do: 0
-  defp op_code(:c_instruction), do: 1
-  defp op_code(_type), do: nil
 
   defp a_value(:a_instruction, "@" <> value), do: value
   defp a_value(_type, _command), do: nil
