@@ -3,6 +3,17 @@
 
 An assembler for the Hack computer (from NAND2Tetris) written in Elixir
 
+
+## Usage
+In `iex -S mix`:
+```elixir
+path_to_file = "~/some_directory/Rect.asm"
+HackAssembler.run(path_to_file) # => :ok
+```
+The compiled machine code will be in `~/some_directory/Rect.hack`
+
+## Example:
+
 Turns:
 
 ```
@@ -66,11 +77,3 @@ Into:
 0000000000010111
 1110101010000111
 ```
-
-## Usage
-In `iex -S mix`:
-```elixir
-path_to_file = "~/some_directory/Rect.asm"
-HackAssembler.run(path_to_file) # => :ok
-```
-The compiled machine code will be in `~/some_directory/Rect.hack`
