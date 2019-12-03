@@ -19,7 +19,7 @@ defmodule HackAssembler.Code do
     "1" => "0111111",
     "-1" => "0111010",
     "D" => "0001100",
-    "A" => "110000",
+    "A" => "0110000",
     "!D" => "0001101",
     "!A" => "0110001",
     "-D" => "0001111",
@@ -56,13 +56,13 @@ defmodule HackAssembler.Code do
     "JMP" => "111"
   }
 
-  alias HackAssembler.{ParsedData, SymbolTable}
+  alias HackAssembler.{ParsedCode, SymbolTable}
 
-  def to_binary(%ParsedData{type: :nothing}, symbol_table), do: {nil, symbol_table}
+  def to_binary(%ParsedCode{type: :nothing}, symbol_table), do: {nil, symbol_table}
 
-  def to_binary(%ParsedData{type: :label}, symbol_table), do: {nil, symbol_table}
+  def to_binary(%ParsedCode{type: :label}, symbol_table), do: {nil, symbol_table}
 
-  def to_binary(%ParsedData{type: :a_instruction, a_value: a_value}, symbol_table) do
+  def to_binary(%ParsedCode{type: :a_instruction, a_value: a_value}, symbol_table) do
     decimal =
       case Integer.parse(a_value) do
         {num, ""} -> num
@@ -83,7 +83,7 @@ defmodule HackAssembler.Code do
     end
   end
 
-  def to_binary(%ParsedData{type: :c_instruction} = parsed_data, symbol_table) do
+  def to_binary(%ParsedCode{type: :c_instruction} = parsed_data, symbol_table) do
     %{c_dest: c_dest, c_comp: c_comp, c_jump: c_jump} = parsed_data
 
     {"111" <> c_comp_to_binary(c_comp) <> c_dest_to_binary(c_dest) <> c_jump_to_binary(c_jump),
@@ -103,8 +103,6 @@ defmodule HackAssembler.Code do
   end
 
   defp decimal_to_16_bit_binary(decimal) do
-    decimal
-    |> Integer.to_string(2)
-    |> String.pad_leading(15, "0")
+    decimal |> Integer.to_string(2) |> String.pad_leading(15, "0")
   end
 end

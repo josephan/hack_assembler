@@ -1,20 +1,20 @@
 defmodule HackAssembler.ParserTest do
   use ExUnit.Case
 
-  alias HackAssembler.{ParsedData, Parser}
+  alias HackAssembler.{ParsedCode, Parser}
 
   describe "parse/1" do
     test "removes comments and whitespace" do
       input = ~s(   @123    // stores 123 in binary to A register\n)
 
-      %ParsedData{command: command} = Parser.parse(input)
+      %ParsedCode{command: command} = Parser.parse(input)
       assert command == "@123"
     end
 
     test "parses :nothing type for comment command" do
       input = ~s(// stores 123 in binary to A register\n)
 
-      %ParsedData{command: command, type: type} = Parser.parse(input)
+      %ParsedCode{command: command, type: type} = Parser.parse(input)
       assert command == ""
       assert type == :nothing
     end
@@ -22,7 +22,7 @@ defmodule HackAssembler.ParserTest do
     test "parses :nothing type for whitespace command" do
       input = "\n"
 
-      %ParsedData{command: command, type: type} = Parser.parse(input)
+      %ParsedCode{command: command, type: type} = Parser.parse(input)
       assert command == ""
       assert type == :nothing
     end
@@ -30,7 +30,7 @@ defmodule HackAssembler.ParserTest do
     test "parses A instruction with value" do
       input = "@1234"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "@1234",
                type: :a_instruction,
                a_value: "1234",
@@ -44,7 +44,7 @@ defmodule HackAssembler.ParserTest do
     test "parses A instruction with LABEL" do
       input = "@LOOP"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "@LOOP",
                type: :a_instruction,
                a_value: "LOOP",
@@ -58,7 +58,7 @@ defmodule HackAssembler.ParserTest do
     test "parses A instruction with variable" do
       input = "@sum"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "@sum",
                type: :a_instruction,
                a_value: "sum",
@@ -72,7 +72,7 @@ defmodule HackAssembler.ParserTest do
     test "parses C instruction with only comp, 0" do
       input = "0"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "0",
                type: :c_instruction,
                a_value: nil,
@@ -86,7 +86,7 @@ defmodule HackAssembler.ParserTest do
     test "parses C instruction with only comp, M-D" do
       input = "M-D"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "M-D",
                type: :c_instruction,
                a_value: nil,
@@ -100,7 +100,7 @@ defmodule HackAssembler.ParserTest do
     test "parses C instruction with comp and jump" do
       input = "0;JMP"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "0;JMP",
                type: :c_instruction,
                a_value: nil,
@@ -114,7 +114,7 @@ defmodule HackAssembler.ParserTest do
     test "parses C instruction with dest and comp" do
       input = "AMD=D+M"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "AMD=D+M",
                type: :c_instruction,
                a_value: nil,
@@ -128,7 +128,7 @@ defmodule HackAssembler.ParserTest do
     test "parses C instruction with compt, dest, and jump" do
       input = "D=D-1;JLE"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "D=D-1;JLE",
                type: :c_instruction,
                a_value: nil,
@@ -142,7 +142,7 @@ defmodule HackAssembler.ParserTest do
     test "parses label declarations" do
       input = "(LOOP)"
 
-      assert Parser.parse(input) == %ParsedData{
+      assert Parser.parse(input) == %ParsedCode{
                command: "(LOOP)",
                type: :label,
                a_value: nil,

@@ -1,4 +1,4 @@
-defmodule HackAssembler.ParsedData do
+defmodule HackAssembler.ParsedCode do
   defstruct [:command, :type, :label_value, :a_value, :c_dest, :c_comp, :c_jump]
 end
 
@@ -6,14 +6,14 @@ defmodule HackAssembler.Parser do
   @moduledoc """
     Unpacks each instruction into its underlying fields
   """
-  alias HackAssembler.ParsedData
+  alias HackAssembler.ParsedCode
 
   def parse(input) do
     command = remove_whitespace_and_comment(input)
     type = get_type(command)
     {c_dest, c_comp, c_jump} = parse_c_instruction(type, command)
 
-    %ParsedData{
+    %ParsedCode{
       command: command,
       type: type,
       a_value: a_value(type, command),
